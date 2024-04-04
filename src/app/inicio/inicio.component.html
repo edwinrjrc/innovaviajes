@@ -1,0 +1,406 @@
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+<div class="container">
+    <mat-tab-group>
+        <mat-tab label="Vuelos">
+            <form>
+                <br>
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-2">
+                            <mat-form-field appearance="fill">
+                                <mat-label>Ida y Vuelta</mat-label>
+                                <mat-select [(value)]="idIdaVuela">
+                                    <mat-option value="1" >Ida y Vuelta</mat-option>
+                                    <mat-option value="2" >Ida</mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+                        <div class="col-md-3">
+                            <mat-form-field appearance="fill" style="width: 100%;">
+                                <mat-label>Clase</mat-label>
+                                <mat-select [(value)]="idClase">
+                                    <mat-option value="1" >Economica</mat-option>
+                                    <mat-option value="2">Negocios</mat-option>
+                                    <mat-option value="3">Ejecutiva</mat-option>
+                                    <mat-option value="4">Economica Premiun</mat-option>
+                                    <mat-option value="5">Primera Clase</mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+                        <div class="col-md-3">
+                            <mat-form-field appearance="fill" style="width: 100%;" >
+                                <mat-label>Origen</mat-label>
+                                <input type="text" matInput [formControl]="myControlOrigen" [matAutocomplete]="autoOrigen" >
+                                <mat-autocomplete #autoOrigen="matAutocomplete" [displayWith]="displayFnOrigen"  >
+                                    @for (option of filteredOptionsOrigen | async; track option) {
+                                        <mat-option [value]="option">{{option.descripcion}} ({{option.codigoIata}})</mat-option>
+                                    }
+                                </mat-autocomplete>
+                            </mat-form-field>
+                        </div>
+                        <div class="col-md-3">
+                            <mat-form-field appearance="fill" style="width: 100%;">
+                                <mat-label>Destino</mat-label>
+                                <input type="text" matInput [formControl]="myControlDestino" [matAutocomplete]="autoDestino">
+                                <mat-autocomplete #autoDestino="matAutocomplete" [displayWith]="displayFnDestino">
+                                    @for (option of filteredOptionsDestino | async; track option) {
+                                        <mat-option [value]="option">{{option.descripcion}} ({{option.codigoIata}})</mat-option>
+                                    }
+                                </mat-autocomplete>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-5">
+                            <mat-form-field appearance="fill" style="width: 100%;">
+                                <mat-label>Fechas Ida - Vuelta</mat-label>
+                                <mat-date-range-input [formGroup]="range" [rangePicker]="picker">
+                                    <input matStartDate formControlName="start" placeholder="Fecha Ida" >
+                                    <input matEndDate formControlName="end" placeholder="Fecha Vuelta">
+                                </mat-date-range-input>
+                                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                                <mat-date-range-picker #picker></mat-date-range-picker>
+
+                                @if(true){
+                                <mat-error>Fecha de Ida
+                                    Invalida</mat-error>
+                                }
+                                @if(true){
+                                    <!--*ngIf="range.controls.end.hasError('matEndDateInvalid')"-->
+                                <mat-error >Fecha de Vuelta
+                                    Invalida</mat-error>
+                                }
+                            </mat-form-field>
+                        </div>
+                        <div class="col-md-2">
+                            <mat-form-field class="example-full-width" appearance="fill" style="width: 100%;">
+                                <mat-label>Adultos</mat-label>
+                                <input matInput type="number" max="10" min="0">
+                            </mat-form-field>
+                        </div>
+                        &nbsp;
+                        <div class="col-md-2">
+                            <mat-form-field class="example-full-width" appearance="fill" style="width: 100%;">
+                                <mat-label>Niños</mat-label>
+                                <input matInput type="number" max="10" min="0">
+                            </mat-form-field>
+                        </div>
+                        &nbsp;
+                        <div class="col-md-2">
+                            <mat-form-field class="example-full-width" appearance="fill" style="width: 100%;">
+                                <mat-label>Infantes</mat-label>
+                                <input matInput type="number" max="10" min="0">
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <button name="buscar" class="btn btn-success" type="button"
+                                style="width: 100%;"><span><span class="material-symbols-outlined">search</span>
+                                    &nbsp;<strong>Buscar</strong></span>&nbsp;</button>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row" style="padding-left: 15px;">
+                        <div class="col-md-9"
+                            style="border-left: 1px; border-left-style: solid; border-color: #f2f5f5; border-left-width: 1px; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #f2f5f5;">
+                            <div class="row"
+                                style="background-color: #f2f5f5; padding-top: 10px; padding-bottom: 10px;">
+                                <div class="col-md-1" style="padding-left: 3%;">
+                                    <span>Ida</span>
+                                </div>
+                                <div class="col-md-3">
+                                    <span>mier 08 de mayo de 2024</span>
+                                </div>
+                                <div class="col-md-3">
+                                    <span>Lima (LIM) -> Talara (TYL)</span>
+                                </div>
+                            </div>
+                            <div class="row" style="padding-top: 10px; padding-bottom: 10px;">
+                                <div class="col-md-1" style="padding-left: 3%; display: flex; align-items: center;">
+                                    <input type="radio" class="mat-form-field">
+                                </div>
+                                <div class="col-md-3" style="display: flex; align-items: center;">
+                                    <img src="../../assets/resources/img/LA_sq.png" style="height: 20px;"><span>LATAM
+                                        Airlines</span>
+                                </div>
+                                <div class="col-md-3" style="display: flex; align-items: center;">
+                                    <span><span class="material-symbols-outlined"
+                                            style="font-size: 11pt;display: none;">flight_takeoff</span> 06:50 am
+                                        &nbsp;-&nbsp;
+                                        <span class="material-symbols-outlined"
+                                            style="font-size: 11pt;display: none;">flight_land</span>08:40 am</span>
+                                </div>
+                                <div class="col-md-1" style="display: flex; align-items: center;">
+                                    <span>Directo</span>
+                                </div>
+                                <div class="col-md-4">
+                                    <span class="material-symbols-outlined">personal_bag</span>
+                                    <span class="material-symbols-outlined">trip</span>
+                                    <span class="material-symbols-outlined">travel_luggage_and_bags</span>
+                                </div>
+                            </div>
+                            <div class="row"
+                                style="background-color: #f2f5f5; padding-top: 10px; padding-bottom: 10px;">
+                                <div class="col-md-3" style="padding-left: 3%;">
+                                    <span>Regreso</span>
+                                </div>
+                                <div class="col-md-3">
+                                    <span>mier 08 de mayo de 2024</span>
+                                </div>
+                                <div class="col-md-3">
+                                    <span>Lima (LIM) -> Talara (TYL)</span>
+                                </div>
+                            </div>
+                            <div class="row" style="padding-top: 10px; padding-bottom: 10px;">
+                                <div class="col-md-1" style="padding-left: 3%; display: flex; align-items: center;">
+                                    <input type="radio" class="mat-form-field">
+                                </div>
+                                <div class="col-md-3" style="display: flex; align-items: center;">
+                                    <img src="../../assets/resources/img/LA_sq.png" style="height: 20px;"><span>LATAM
+                                        Airlines</span>
+                                </div>
+                                <div class="col-md-3" style="display: flex; align-items: center;">
+                                    <span><span class="material-symbols-outlined"
+                                            style="font-size: 11pt;display: none;">flight_takeoff</span> 06:50 am
+                                        &nbsp;-&nbsp;
+                                        <span class="material-symbols-outlined"
+                                            style="font-size: 11pt;display: none;">flight_land</span>08:40 am</span>
+                                </div>
+                                <div class="col-md-1" style="display: flex; align-items: center;">
+                                    <span>Directo</span>
+                                </div>
+                                <div class="col-md-4">
+                                    <span class="material-symbols-outlined">personal_bag</span>
+                                    <span class="material-symbols-outlined">trip</span>
+                                    <span class="material-symbols-outlined">travel_luggage_and_bags</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3"
+                            style="border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #f2f5f5;">
+                            <div class="row">
+                                <div class="col-md-12" style="text-align: right; padding-right: 20px;padding-top: 3px;">
+                                    <span><strong>Precios</strong></span>
+                                </div>
+                            </div>
+                            <div class="row" style="text-align: right;">
+                                <div class="col-md-12">
+                                    <span style="font-weight: bold;font-size: 15pt;">US$</span>&nbsp;<span
+                                        style="font-size: 15pt;text-align: right;">1,098.21</span>
+                                </div>
+                            </div>
+                            <div class="row" style="text-align: right;">
+                                <div class="col-md-7" style="text-align: left;">
+                                    <span style="font-size: 10pt;">Adultos (2)</span>
+                                </div>
+                                <div class="col-md-5">
+                                    <span style="font-size: 10pt; color: darkgray;">US$</span>&nbsp;<span
+                                        style="font-size: 10pt; color: darkgray; text-align: right;">1,098.21</span>
+                                </div>
+                            </div>
+                            <div class="row" style="text-align: right;">
+                                <div class="col-md-7" style="text-align: left;">
+                                    <span style="font-size: 10pt;">Niños (1)</span>
+                                </div>
+                                <div class="col-md-5">
+                                    <span style="font-size: 10pt; color: darkgray;">US$</span>&nbsp;<span
+                                        style="font-size: 10pt; color: darkgray; text-align: right;">456.87</span>
+                                </div>
+                            </div>
+                            <div class="row" style="text-align: right;">
+                                <div class="col-md-7" style="text-align: left;">
+                                    <span style="font-size: 10pt;">Infantes (0)</span>
+                                </div>
+                                <div class="col-md-5">
+                                    <span style="font-size: 10pt; color: darkgray;">US$</span>&nbsp;<span
+                                        style="font-size: 10pt; color: darkgray; text-align: right;">456.87</span>
+                                </div>
+                            </div>
+                            <div class="row" style="text-align: right;">
+                                <div class="col-md-7" style="text-align: left;">
+                                    <span style="font-size: 10pt;">Imptos y otros cargos</span>
+                                </div>
+                                <div class="col-md-5">
+                                    <span style="font-size: 10pt; color: darkgray;">US$</span>&nbsp;<span
+                                        style="font-size: 10pt; color: darkgray; text-align: right;">238.06</span>
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row" style="text-align: right;">
+                                <div class="col-md-4" style="text-align: left;font-weight: bold;font-size: 14pt;">
+                                    <span style="font-size: 10pt;">Total</span>
+                                </div>
+                                <div class="col-md-8">
+                                    <span
+                                        style="font-size: 10pt; font-weight: bold;font-size: 14pt;">US$</span>&nbsp;<span
+                                        style="text-align: right; font-weight: bold;font-size: 14pt;">5624.54</span>
+                                </div>
+                            </div>
+                            <br>
+                            <div class="row" style="text-align: right;">
+                                <div class="col-md-12">
+                                    <button name="comprar" class="btn btn-outline-info" type="button"
+                                        style="width: 100%;"><strong>Comprar</strong></button>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <br>
+                            </div>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="row" style="padding-left: 15px;">
+                        <div class="col-md-9"
+                            style="border-left: 1px; border-left-style: solid; border-color: #f2f5f5; border-left-width: 1px; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #f2f5f5;">
+                            <div class="row"
+                                style="background-color: #f2f5f5; padding-top: 10px; padding-bottom: 10px;">
+                                <div class="col-md-1" style="padding-left: 3%;">
+                                    <span>Ida</span>
+                                </div>
+                                <div class="col-md-3">
+                                    <span>mier 08 de mayo de 2024</span>
+                                </div>
+                                <div class="col-md-3">
+                                    <span>Lima (LIM) -> Talara (TYL)</span>
+                                </div>
+                            </div>
+                            <div class="row" style="padding-top: 10px; padding-bottom: 10px;">
+                                <div class="col-md-1" style="padding-left: 3%; display: flex; align-items: center;">
+                                    <input type="radio" class="mat-form-field">
+                                </div>
+                                <div class="col-md-3" style="display: flex; align-items: center;">
+                                    <img src="../../assets/resources/img/LA_sq.png" style="height: 20px;"><span>LATAM
+                                        Airlines</span>
+                                </div>
+                                <div class="col-md-3" style="display: flex; align-items: center;">
+                                    <span><span class="material-symbols-outlined"
+                                            style="font-size: 11pt;display: none;">flight_takeoff</span> 06:50 am
+                                        &nbsp;-&nbsp;
+                                        <span class="material-symbols-outlined"
+                                            style="font-size: 11pt;display: none;">flight_land</span>08:40 am</span>
+                                </div>
+                                <div class="col-md-1" style="display: flex; align-items: center;">
+                                    <span>Directo</span>
+                                </div>
+                                <div class="col-md-4">
+                                    <span class="material-symbols-outlined">personal_bag</span>
+                                    <span class="material-symbols-outlined">trip</span>
+                                    <span class="material-symbols-outlined">travel_luggage_and_bags</span>
+                                </div>
+                            </div>
+                            <div class="row"
+                                style="background-color: #f2f5f5; padding-top: 10px; padding-bottom: 10px;">
+                                <div class="col-md-3" style="padding-left: 3%;">
+                                    <span>Regreso</span>
+                                </div>
+                                <div class="col-md-3">
+                                    <span>mier 08 de mayo de 2024</span>
+                                </div>
+                                <div class="col-md-3">
+                                    <span>Lima (LIM) -> Talara (TYL)</span>
+                                </div>
+                            </div>
+                            <div class="row" style="padding-top: 10px; padding-bottom: 10px;">
+                                <div class="col-md-1" style="padding-left: 3%; display: flex; align-items: center;">
+                                    <input type="radio" class="mat-form-field">
+                                </div>
+                                <div class="col-md-3" style="display: flex; align-items: center;">
+                                    <img src="../../assets/resources/img/LA_sq.png" style="height: 20px;"><span>LATAM
+                                        Airlines</span>
+                                </div>
+                                <div class="col-md-3" style="display: flex; align-items: center;">
+                                    <span><span class="material-symbols-outlined"
+                                            style="font-size: 11pt;display: none;">flight_takeoff</span> 06:50 am
+                                        &nbsp;-&nbsp;
+                                        <span class="material-symbols-outlined"
+                                            style="font-size: 11pt;display: none;">flight_land</span>08:40 am</span>
+                                </div>
+                                <div class="col-md-1" style="display: flex; align-items: center;">
+                                    <span>Directo</span>
+                                </div>
+                                <div class="col-md-4">
+                                    <span class="material-symbols-outlined">personal_bag</span>
+                                    <span class="material-symbols-outlined">trip</span>
+                                    <span class="material-symbols-outlined">travel_luggage_and_bags</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3"
+                            style="border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #f2f5f5;">
+                            <div class="row">
+                                <div class="col-md-12" style="text-align: right; padding-right: 20px;padding-top: 3px;">
+                                    <span><strong>Precios</strong></span>
+                                </div>
+                            </div>
+                            <div class="row" style="text-align: right;">
+                                <div class="col-md-12">
+                                    <span style="font-weight: bold;font-size: 15pt;">US$</span>&nbsp;<span
+                                        style="font-size: 15pt;text-align: right;">1,098.21</span>
+                                </div>
+                            </div>
+                            <div class="row" style="text-align: right;">
+                                <div class="col-md-7" style="text-align: left;">
+                                    <span style="font-size: 10pt;">Adultos (2)</span>
+                                </div>
+                                <div class="col-md-5">
+                                    <span style="font-size: 10pt; color: darkgray;">US$</span>&nbsp;<span
+                                        style="font-size: 10pt; color: darkgray; text-align: right;">1,098.21</span>
+                                </div>
+                            </div>
+                            <div class="row" style="text-align: right;">
+                                <div class="col-md-7" style="text-align: left;">
+                                    <span style="font-size: 10pt;">Niños (1)</span>
+                                </div>
+                                <div class="col-md-5">
+                                    <span style="font-size: 10pt; color: darkgray;">US$</span>&nbsp;<span
+                                        style="font-size: 10pt; color: darkgray; text-align: right;">456.87</span>
+                                </div>
+                            </div>
+                            <div class="row" style="text-align: right;">
+                                <div class="col-md-7" style="text-align: left;">
+                                    <span style="font-size: 10pt;">Infantes (0)</span>
+                                </div>
+                                <div class="col-md-5">
+                                    <span style="font-size: 10pt; color: darkgray;">US$</span>&nbsp;<span
+                                        style="font-size: 10pt; color: darkgray; text-align: right;">456.87</span>
+                                </div>
+                            </div>
+                            <div class="row" style="text-align: right;">
+                                <div class="col-md-7" style="text-align: left;">
+                                    <span style="font-size: 10pt;">Imptos y otros cargos</span>
+                                </div>
+                                <div class="col-md-5">
+                                    <span style="font-size: 10pt; color: darkgray;">US$</span>&nbsp;<span
+                                        style="font-size: 10pt; color: darkgray; text-align: right;">238.06</span>
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row" style="text-align: right;">
+                                <div class="col-md-4" style="text-align: left;font-weight: bold;font-size: 14pt;">
+                                    <span style="font-size: 10pt;">Total</span>
+                                </div>
+                                <div class="col-md-8">
+                                    <span
+                                        style="font-size: 10pt; font-weight: bold;font-size: 14pt;">US$</span>&nbsp;<span
+                                        style="text-align: right; font-weight: bold;font-size: 14pt;">5624.54</span>
+                                </div>
+                            </div>
+                            <br>
+                            <div class="row" style="text-align: right;">
+                                <div class="col-md-12">
+                                    <button name="comprar" class="btn btn-outline-info" type="button"
+                                        style="width: 100%;"><strong>Comprar</strong></button>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <br>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </mat-tab>
+    </mat-tab-group>
+</div>
