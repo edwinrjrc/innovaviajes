@@ -19,6 +19,6 @@ export class CatalogosService {
       let params = new HttpParams();
       params.set('nombreDestino', nombreDestino);
 
-      return this.http.get<InterDataRptaDestino>(`${environment.apiUrl}/iv-service-viajes/destinoservice/destinoService`, {headers : cabece, observe: 'body', params:params } );
+      return this.http.get<InterDataRptaDestino>(`${environment.apiUrl}/iv-service-viajes/destinoservice/destinoCiudadService`, {headers : cabece, observe: 'body', params:params } );
   }
 }

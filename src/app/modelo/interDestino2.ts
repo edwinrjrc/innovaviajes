@@ -1,14 +1,14 @@
-import { Pais } from "./interPais";
-
 export interface InterDestino2{
+    id: Number;
+    descripcion: string;
+    nombreCiudad: string;
+    nombrePais: string;
+    codigoIata: string;
+    nombreAeropuertoMostrar: string;
     idUsuarioRegistro: Number;
     fechaRegistro: Date;
     idUsuarioModificacion: Number;
     fechaModificacion: Date;
-    id: Number;
-    idContinente: Number;
-    pais: Pais;
-    codigoIata: string;
-    idTipoDestino: Number;
-    descripcion: string;
+    idEstadoRegistro: number;
+
 }
