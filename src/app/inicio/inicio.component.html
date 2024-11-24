@@ -11,25 +11,24 @@
                         <div class="row">
                             <div class="col-md-2">
                                 <div class="input-group mb-3">
-                                    <select class="form-select" id="inputGroupSelect01" [(ngModel)]="modelTipoVuelo" name="tipoVuelo">
+                                    <select class="form-select" id="selTipoVuelo" [(ngModel)]="modelTipoVuelo" name="tipoVuelo">
                                         <option value="1">Ida y Vuelta</option>
                                         <option value="2">Solo Ida</option>
                                     </select>
                                 </div>
                             </div>
                             <div class="col-md-5">
-                                <input id="typeahead-format" type="text" class="form-control col" [(ngModel)]="modelOrigen" name="modeloOrigen"
+                                <input id="txtOrigen" type="text" class="form-control col" [(ngModel)]="modelOrigen" name="modeloOrigen"
                                     [ngbTypeahead]="search" [inputFormatter]="formatter2" [resultFormatter]="formatter2" [selectOnExact]="true" placeholder="Origen" />
                             </div>
                             <div class="col-md-5">
-                                <input id="typeahead-format" type="text" class="form-control col" [(ngModel)]="modelDestino" name="modeloDestino"
+                                <input id="txtDestino" type="text" class="form-control col" [(ngModel)]="modelDestino" name="modeloDestino"
                                 [ngbTypeahead]="search" [inputFormatter]="formatter2" [resultFormatter]="formatter2" [selectOnExact]="true" placeholder="Destino" />
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-md-2">
-
-                                <select class="form-select" id="inputGroupSelect01" [(ngModel)]="modelClaseVuelo" name="claseVuelo">
+                                <select class="form-select" id="selClaseVuelo" [(ngModel)]="modelClaseVuelo" name="claseVuelo">
                                     <option value="1" selected>Economica</option>
                                     <option value="2">Negocios</option>
                                     <option value="3">Ejecutiva</option>
@@ -89,28 +88,31 @@
                             <div class="col-md-12">
                                 <button name="buscar" class="btn btn-success" type="button" style="width: 100%;"
                                     (click)="consultarVuelo()"><strong><i class="bi bi-search"></i>&nbsp;Buscar</strong>&nbsp;</button>
+                                <a href="#" (click)="cargarDestinos()"> Destinos</a>
                             </div>
                         </div>
                     </div>
                     <div class="container">
                         <hr>
                         <div class="row">
-                            <div class="col-2">
-                                <div class="container">
+                            <div class="col-md-2">
+                                <!--div class="container">
                                     <div class="row">
                                         <div class="col-md-12">
 
                                         </div>
                                     </div>
-                                </div>
+                                </div-->
+                                &nbsp;
                             </div>
-                            <div class="col-8">
+                            <div class="col-md-9">
+                                antes de ofertas 0
                                 @for(v_oferEncontrada of vuelosEncontrados.ofertasEncontradas; track v_oferEncontrada){
                                 <app-ofertavuelo [ofertaEncontrada]="v_oferEncontrada"></app-ofertavuelo>
                                 }
                             </div>
                         </div>
-                        <div class="col-2">&nbsp;</div>
+                        <div class="col-md-1">&nbsp;</div>
                     </div>
                 </form>
             </ng-template>

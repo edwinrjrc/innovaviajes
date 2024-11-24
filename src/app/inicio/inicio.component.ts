@@ -104,16 +104,21 @@ export class InicioComponent implements OnInit {
     /*this._locale = 'fr';
     this._adapter.setLocale(this._locale);*/
     
-    this.catalogoService.listarDestinos('').subscribe(resp => {
-      this.arregloRespDestinos =  resp;
-      //this.cargaDatosSeleccionDestinoOrigen();
-    });
+    this.cargarDestinos();
 
     this.modelTipoVuelo = 1;
     this.modelClaseVuelo = 1;
     this.precioAdulto = 10098.20;
 
     this.vuelosEncontrados = {idUsuarioRegistro:0,fechaRegistro:new Date(),idUsuarioModificacion:0,fechaModificacion:new Date(),idEstadoRegistro:0,ofertasEncontradas:[]};
+  }
+
+  cargarDestinos(){
+    alert('llamada Metodo Destinos');
+    this.catalogoService.listarDestinos('').subscribe(resp => {
+      this.arregloRespDestinos =  resp;
+      //this.cargaDatosSeleccionDestinoOrigen();
+    });
   }
 
   /*
@@ -169,9 +174,8 @@ export class InicioComponent implements OnInit {
   }
 
   consultarVuelo(){
-
-    let consultaViaje: ConsultaViaje = new ConsultaViaje();
-
+    try {
+      let consultaViaje: ConsultaViaje = new ConsultaViaje();
     if (this.fromDate){
       consultaViaje.FechaIda = new Date(this.fromDate.year, this.fromDate.month - 1, this.fromDate.day);
     }
@@ -189,8 +193,9 @@ export class InicioComponent implements OnInit {
 
     this.viajeService.consultarVuelo(consultaViaje).subscribe(resp => {
       this.vuelosEncontrados = resp.dataRpta;
-      console.log(this.vuelosEncontrados);
     });
+    }catch(e){
+    }
   }
 
   validateInput(currentValue: NgbDate | null, input: string): NgbDate | null {

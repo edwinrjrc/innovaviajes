@@ -26,8 +26,12 @@ export class ViajeService {
     params = params.append('ninos', consultaViaje.Ninos);
     params = params.append('infantes', consultaViaje.Infantes);
 
-    console.log(params);
+    //console.log(params);
+
+    alert('Metodo servicio ::'+consultaViaje.CodigoIataOrigen);
+
+    const servicio = this.http.get<RptaVuelosEncontrados>(`${environment.apiUrl}/iv-service-viajes/viajeService/vuelosCotizacion`, {headers : cabece, observe: 'body', params:params } );
     
-    return this.http.get<RptaVuelosEncontrados>(`${environment.apiUrl}/iv-service-viajes/viajeService/vuelosCotizacion`, {headers : cabece, params:params } );
+    return servicio;
   }
 }

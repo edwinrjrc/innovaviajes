@@ -6,4 +6,6 @@ export interface HorarioVuelo{
     fechaLlegadaVuelo: Date;
     aerolineaDto: Aerolinea;
     escalas: TramoEscala[];
+    inEscalas: Number;
+    numeroEscalas: Number;
 }

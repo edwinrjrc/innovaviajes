@@ -11,4 +11,5 @@ export interface PrecioOferta{
     totalImpuestos: Number;
     totalFee: Number;
     totalRuta: Number;
+    totalImptosCargos: Number;
 }
