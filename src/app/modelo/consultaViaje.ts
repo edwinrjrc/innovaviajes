@@ -4,10 +4,12 @@ export class ConsultaViaje{
     private codigoIataDestino!: string;
     private claseVuelo!: string;
     private fechaIda!: Date;
+    private fechaIdaStr!: string;
     private fechaVuelta!: Date;
-    private adultos!: number;
-    private ninos!: number;
-    private infantes!: number;
+    private fechaVueltaStr!: string;
+    private adultos!: string;
+    private ninos!: string;
+    private infantes!: string;
 
     
     public get TipoViaje() : string {
@@ -30,11 +32,9 @@ export class ConsultaViaje{
         return this.codigoIataDestino;
     }
 
-    
     public set CodigoIataDestino(v : string) {
         this.codigoIataDestino = v;
     }
-    
     
     public get ClaseVuelo() : string {
         return this.claseVuelo;
@@ -60,28 +60,46 @@ export class ConsultaViaje{
         this.fechaVuelta = v;
     }
     
-    public get Adultos() : number {
+    public get Adultos() : string {
         return this.adultos;
     }
     
-    public set Adultos(v : number) {
+    public set Adultos(v : string) {
         this.adultos = v;
     }
     
-    public get Ninos() : number {
+    public get Ninos() : string {
         return this.ninos;
     }
     
-    public set Ninos(v : number) {
+    public set Ninos(v : string) {
         this.ninos = v;
     }
     
-    public get Infantes() : number {
+    public get Infantes() : string {
         return this.infantes;
     }
     
-    public set Infantes(v : number) {
+    public set Infantes(v : string) {
         this.infantes = v;
     }
+
+    public set FechaIdaStr(v : string) {
+        this.fechaIdaStr = v;
+    }
+    
+    public get FechaIdaStr() : string {
+        return this.fechaIdaStr;
+    }
+
+    
+    public set FechaVueltaStr(v : string) {
+        this.fechaVueltaStr = v;
+    }
+    
+    public get FechaVueltaStr() : string {
+        return this.fechaVueltaStr;
+    }
+    
     
 }

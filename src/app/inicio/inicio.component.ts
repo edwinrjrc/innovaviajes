@@ -1,28 +1,49 @@
-import { Component, inject, Inject, OnInit } from '@angular/core';
-import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { Component, inject, OnInit } from '@angular/core';
+import {
+  FormControl,
+  FormGroup,
+  FormsModule,
+  ReactiveFormsModule,
+} from '@angular/forms';
 import { Clasevuelo } from '../modelo/clasevuelo';
 import { Observable, OperatorFunction } from 'rxjs';
-import { map, startWith, debounceTime, distinctUntilChanged } from 'rxjs/operators';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatButtonToggleModule } from '@angular/material/button-toggle';
-import { AsyncPipe, formatDate, JsonPipe } from '@angular/common';
+import {
+  map,
+  startWith,
+  debounceTime,
+  distinctUntilChanged,
+} from 'rxjs/operators';
 import { CatalogosService } from '../_services/catalogos.service';
 import { InterDestino2 } from '../modelo/interDestino2';
 import { InterDataRptaDestino } from '../modelo/InterDataRptaDestino';
 import { ConsultaViaje } from '../modelo/consultaViaje';
 import { ViajeService } from '../_services/viaje.service';
-import { OfertavueloComponent } from "../ofertavuelo/ofertavuelo.component";
-import { MatAccordion, MatExpansionModule } from '@angular/material/expansion';
-import { NgbCalendar, NgbDate, NgbDateParserFormatter, NgbDatepickerModule, NgbNavModule, NgbTypeaheadModule } from '@ng-bootstrap/ng-bootstrap';
+import { OfertavueloComponent } from '../ofertavuelo/ofertavuelo.component';
+import {
+  NgbCalendar,
+  NgbDate,
+  NgbDateParserFormatter,
+  NgbDatepickerModule,
+  NgbNavModule,
+  NgbTypeaheadModule,
+} from '@ng-bootstrap/ng-bootstrap';
 import { VuelosEncontrados } from '../modelo/vueltosEncontrados';
-
+import { UtilconversionsService } from '../_services/utilconversions.service';
+import { Console } from 'console';
 
 @Component({
   selector: 'app-inicio',
   standalone: true,
-  imports: [MatAccordion, MatExpansionModule, MatButtonToggleModule, MatFormFieldModule, FormsModule, ReactiveFormsModule, AsyncPipe, OfertavueloComponent, NgbDatepickerModule, JsonPipe, NgbNavModule, NgbTypeaheadModule],
+  imports: [
+    FormsModule,
+    ReactiveFormsModule,
+    OfertavueloComponent,
+    NgbDatepickerModule,
+    NgbNavModule,
+    NgbTypeaheadModule,
+  ],
   templateUrl: './inicio.component.html',
-  styleUrl: './inicio.component.css'
+  styleUrl: './inicio.component.css',
 })
 export class InicioComponent implements OnInit {
   active = 1;
@@ -30,7 +51,7 @@ export class InicioComponent implements OnInit {
   filteredOptionsOrigen!: Observable<InterDestino2[]>;
   filteredOptionsDestino!: Observable<InterDestino2[]>;
 
-  arregloRespDestinos !:InterDataRptaDestino;
+  arregloRespDestinos!: InterDataRptaDestino;
 
   myControlAdultos = new FormControl('');
   myControlNinos = new FormControl('');
@@ -44,18 +65,17 @@ export class InicioComponent implements OnInit {
 
   modelOrigen!: InterDestino2;
   modelDestino!: InterDestino2;
-  formatter2 = (result: InterDestino2) => result.nombreAeropuertoMostrar.toUpperCase();
+  formatter2 = (result: InterDestino2) =>
+    result.nombreAeropuertoMostrar.toUpperCase();
 
-  modelTipoVuelo: any;
-  modelClaseVuelo: any;
+  modelTipoVuelo!: string;
+  modelClaseVuelo!: string;
 
   vuelosEncontrados!: VuelosEncontrados;
 
-  modelNroAdultos :number =1;
-  modelNroNinos :number =0;
-  modelNroInfantes :number = 0;
-
-  precioAdulto = 10098.21;
+  modelNroAdultos: number = 1;
+  modelNroNinos: number = 0;
+  modelNroInfantes: number = 0;
 
   range = new FormGroup({
     start: new FormControl<Date | null>(null),
@@ -63,94 +83,84 @@ export class InicioComponent implements OnInit {
   });
 
   calendar = inject(NgbCalendar);
-	formatter = inject(NgbDateParserFormatter);
+  formatter = inject(NgbDateParserFormatter);
 
-	hoveredDate: NgbDate | null = null;
-	fromDate: NgbDate | null = this.calendar.getToday();
-	toDate: NgbDate | null = this.calendar.getNext(this.calendar.getToday(), 'd', 10);
+  hoveredDate: NgbDate | null = null;
+  fromDate: NgbDate | null = this.calendar.getToday();
+  toDate: NgbDate | null = this.calendar.getNext(
+    this.calendar.getToday(),
+    'd',
+    10
+  );
 
- 
-	onDateSelection(date: NgbDate) {
-		if (!this.fromDate && !this.toDate) {
-			this.fromDate = date;
-		} else if (this.fromDate && !this.toDate && date && date.after(this.fromDate)) {
-			this.toDate = date;
-		} else {
-			this.toDate = null;
-			this.fromDate = date;
-		}
-	}
+  onDateSelection(date: NgbDate) {
+    if (!this.fromDate && !this.toDate) {
+      this.fromDate = date;
+    } else if (
+      this.fromDate &&
+      !this.toDate &&
+      date &&
+      date.after(this.fromDate)
+    ) {
+      this.toDate = date;
+    } else {
+      this.toDate = null;
+      this.fromDate = date;
+    }
+  }
 
-  /*
-  constructor(private _adapter: DateAdapter<any>,
-    private _intl: MatDatepickerIntl,
-    @Inject(MAT_DATE_LOCALE) private _locale: string, private catalogoService: CatalogosService, private viajeService:ViajeService) {
+  iataDestinoEncryp!:string
+
+  constructor(
+    private catalogoService: CatalogosService,
+    private viajeService: ViajeService, private _utilconversionsService: UtilconversionsService
+  ) {
     this.iniciaClaseVuelo();
     this.idIdaVuela = '1';
     this.idClase = '1';
-    
-    this.controlAdultos.setValue('1');
-    this.controlNinos.setValue('0');
-    this.controlInfantes.setValue('0');
-  }*/
-
-    constructor(private catalogoService: CatalogosService, private viajeService:ViajeService) {
-      this.iniciaClaseVuelo();
-      this.idIdaVuela = '1';
-      this.idClase = '1';
-    }
+  }
 
   ngOnInit(): void {
-    /*this._locale = 'fr';
-    this._adapter.setLocale(this._locale);*/
-    
     this.cargarDestinos();
 
-    this.modelTipoVuelo = 1;
-    this.modelClaseVuelo = 1;
-    this.precioAdulto = 10098.20;
+    this.modelTipoVuelo = '1';
+    this.modelClaseVuelo = '1';
 
-    this.vuelosEncontrados = {idUsuarioRegistro:0,fechaRegistro:new Date(),idUsuarioModificacion:0,fechaModificacion:new Date(),idEstadoRegistro:0,ofertasEncontradas:[]};
+    this.vuelosEncontrados = {
+      idUsuarioRegistro: 0,
+      fechaRegistro: new Date(),
+      idUsuarioModificacion: 0,
+      fechaModificacion: new Date(),
+      idEstadoRegistro: 0,
+      ofertasEncontradas: [],
+    };
+
+    //this.consultarVuelo2();
   }
 
-  cargarDestinos(){
-    alert('llamada Metodo Destinos');
-    this.catalogoService.listarDestinos('').subscribe(resp => {
-      this.arregloRespDestinos =  resp;
-      //this.cargaDatosSeleccionDestinoOrigen();
+  cargarDestinos() {
+    this.catalogoService.listarDestinos('').subscribe((resp) => {
+      this.arregloRespDestinos = resp;
     });
   }
-
-  /*
-  cargaDatosSeleccionDestinoOrigen(){
-    this.filteredOptionsDestino = this.myControlDestino.valueChanges.pipe(
-      startWith(''),
-      map(value => {
-        const name = typeof value === 'string' ? value : value?.descripcion;
-        return name ? this._filter(name as string) : this.arregloRespDestinos.dataRpta.slice();
-      })
-    );
-
-    this.filteredOptionsOrigen = this.myControlOrigen.valueChanges.pipe(
-      startWith(''),
-      map(value => {
-        const name = typeof value === 'string' ? value : value?.descripcion;
-        return name ? this._filter(name as string) : this.arregloRespDestinos.dataRpta.slice();
-      })
-    );
-  }*/
 
   private _filter(name: string): InterDestino2[] {
     const filterValue = name.toLowerCase();
 
-    return this.arregloRespDestinos.dataRpta.filter(option => option.nombreAeropuertoMostrar.toLowerCase().includes(filterValue));
+    return this.arregloRespDestinos.dataRpta.filter((option) =>
+      option.nombreAeropuertoMostrar.toLowerCase().includes(filterValue)
+    );
   }
 
   displayFnOrigen(destino: InterDestino2): string {
-    return destino && destino.nombreAeropuertoMostrar ? destino.nombreAeropuertoMostrar  : 'Vacio';
+    return destino && destino.nombreAeropuertoMostrar
+      ? destino.nombreAeropuertoMostrar
+      : 'Vacio';
   }
   displayFnDestino(destino: InterDestino2): string {
-    return destino && destino.nombreAeropuertoMostrar ? destino.nombreAeropuertoMostrar  : 'Vacio';
+    return destino && destino.nombreAeropuertoMostrar
+      ? destino.nombreAeropuertoMostrar
+      : 'Vacio';
   }
 
   iniciaClaseVuelo() {
@@ -173,60 +183,127 @@ export class InicioComponent implements OnInit {
     this.listaClasesVuelo[2] = claseVuelo;
   }
 
-  consultarVuelo(){
+  async consultarVuelo() {
     try {
       let consultaViaje: ConsultaViaje = new ConsultaViaje();
-    if (this.fromDate){
-      consultaViaje.FechaIda = new Date(this.fromDate.year, this.fromDate.month - 1, this.fromDate.day);
-    }
-    if (this.toDate){
-      consultaViaje.FechaVuelta = new Date(this.toDate.year, this.toDate.month - 1, this.toDate.day);;
-    }
-    
-    consultaViaje.CodigoIataDestino = this.modelDestino.codigoIata;
-    consultaViaje.CodigoIataOrigen = this.modelOrigen.codigoIata;
-    consultaViaje.Adultos = Number(this.myControlAdultos.value);
-    consultaViaje.Ninos = Number(this.myControlNinos.value);
-    consultaViaje.Infantes = Number(this.myControlInfantes.value);
-    consultaViaje.ClaseVuelo = this.modelClaseVuelo;
-    consultaViaje.TipoViaje = this.modelTipoVuelo;
+      if (this.fromDate) {
+        consultaViaje.FechaIda = new Date(
+          this.fromDate.year,
+          this.fromDate.month - 1,
+          this.fromDate.day
+        );
+      }
+      if (this.toDate) {
+        consultaViaje.FechaVuelta = new Date(
+          this.toDate.year,
+          this.toDate.month - 1,
+          this.toDate.day
+        );
+      }
 
-    this.viajeService.consultarVuelo(consultaViaje).subscribe(resp => {
-      this.vuelosEncontrados = resp.dataRpta;
-    });
-    }catch(e){
+      const valueFechaIda = await this._utilconversionsService.encryptData(consultaViaje.FechaIda.toLocaleDateString());
+      consultaViaje.FechaIdaStr = valueFechaIda;
+
+      const valueFechaVuelta = await this._utilconversionsService.encryptData(consultaViaje.FechaVuelta.toLocaleDateString());
+      consultaViaje.FechaVueltaStr = valueFechaVuelta;
+
+      const valueEncryptDestino = await this._utilconversionsService.encryptData(this.modelDestino.codigoIata);
+      consultaViaje.CodigoIataDestino = valueEncryptDestino;
+
+      const valueEncryptOrigen = await this._utilconversionsService.encryptData(this.modelOrigen.codigoIata);
+      consultaViaje.CodigoIataOrigen = valueEncryptOrigen;
+
+      const valueNumAdultos = await this._utilconversionsService.encryptData(this.myControlAdultos.value != null ? this.myControlAdultos.value: '');
+      consultaViaje.Adultos = valueNumAdultos;
+
+      const valueNumNinos = await this._utilconversionsService.encryptData(this.myControlNinos.value != null ? this.myControlNinos.value: '');
+      consultaViaje.Ninos = valueNumNinos;
+
+      const valueNumInfantes = await this._utilconversionsService.encryptData(this.myControlInfantes.value != null ? this.myControlInfantes.value: '');
+      consultaViaje.Infantes = valueNumInfantes;
+
+      const valueClaseVuelo = await this._utilconversionsService.encryptData(this.modelClaseVuelo);
+      consultaViaje.ClaseVuelo = valueClaseVuelo;
+
+      const valueTipoVuelo = await this._utilconversionsService.encryptData(this.modelTipoVuelo);
+      consultaViaje.TipoViaje = valueTipoVuelo;
+
+      this.viajeService.consultarVuelo(consultaViaje).subscribe((resp) => {
+        this.vuelosEncontrados = resp.dataRpta;
+      });
+    } catch (e) {
+      e;
     }
   }
 
+  consultarVuelo2() {
+    try {
+      let consultaViaje: ConsultaViaje = new ConsultaViaje();
+
+      consultaViaje.FechaIda = new Date(2024,10,4);
+      consultaViaje.FechaVuelta = new Date(2024,11,15);
+
+      consultaViaje.CodigoIataDestino = 'LIM';
+      consultaViaje.CodigoIataOrigen = 'TLA';
+      consultaViaje.Adultos = '1';
+      consultaViaje.Ninos = '0';
+      consultaViaje.Infantes = '0';
+      consultaViaje.ClaseVuelo = '1';
+      consultaViaje.TipoViaje = '1';
+
+      this.viajeService.consultarVuelo(consultaViaje).subscribe((resp) => {
+        this.vuelosEncontrados = resp.dataRpta;
+      });
+    } catch (e) {}
+  }
+
   validateInput(currentValue: NgbDate | null, input: string): NgbDate | null {
-		const parsed = this.formatter.parse(input);
-		return parsed && this.calendar.isValid(NgbDate.from(parsed)) ? NgbDate.from(parsed) : currentValue;
-	}
+    const parsed = this.formatter.parse(input);
+    return parsed && this.calendar.isValid(NgbDate.from(parsed))
+      ? NgbDate.from(parsed)
+      : currentValue;
+  }
 
   isInside(date: NgbDate) {
-		return this.toDate && date.after(this.fromDate) && date.before(this.toDate);
-	}
+    return this.toDate && date.after(this.fromDate) && date.before(this.toDate);
+  }
 
   isHovered(date: NgbDate) {
-		return (
-			this.fromDate && !this.toDate && this.hoveredDate && date.after(this.fromDate) && date.before(this.hoveredDate)
-		);
-	}
+    return (
+      this.fromDate &&
+      !this.toDate &&
+      this.hoveredDate &&
+      date.after(this.fromDate) &&
+      date.before(this.hoveredDate)
+    );
+  }
 
   isRange(date: NgbDate) {
-		return (
-			date.equals(this.fromDate) ||
-			(this.toDate && date.equals(this.toDate)) ||
-			this.isInside(date) ||
-			this.isHovered(date)
-		);
-	}
-  search: OperatorFunction<string, readonly InterDestino2[]> = (text$: Observable<String>) =>
-		text$.pipe(
-			debounceTime(200),
-			distinctUntilChanged(),
-			map((term) =>
-				term === null ? [] : this.arregloRespDestinos.dataRpta.filter((v) => v.nombreAeropuertoMostrar.toLowerCase().indexOf(term.toLowerCase()) > -1).slice(0, 10),
-			),
-		);
+    return (
+      date.equals(this.fromDate) ||
+      (this.toDate && date.equals(this.toDate)) ||
+      this.isInside(date) ||
+      this.isHovered(date)
+    );
+  }
+
+  search: OperatorFunction<string, readonly InterDestino2[]> = (
+    text$: Observable<String>
+  ) =>
+    text$.pipe(
+      debounceTime(200),
+      distinctUntilChanged(),
+      map((term) =>
+        term === null
+          ? []
+          : this.arregloRespDestinos.dataRpta
+              .filter(
+                (v) =>
+                  v.nombreAeropuertoMostrar
+                    .toLowerCase()
+                    .indexOf(term.toLowerCase()) > -1
+              )
+              .slice(0, 10)
+      )
+    );
 }

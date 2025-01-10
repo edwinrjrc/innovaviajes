@@ -4,7 +4,7 @@
         @for (v_rutaTramo of ofertaEncontrada.listaRutaTramos; track v_rutaTramo){
         <div class="row"
             style="background-color: #f2f5f5; padding-top: 10px; padding-bottom: 10px; display: flex; align-items: center;">
-            <div class="col-md-1">
+            <div class="col-sm-1">
                 @if(v_rutaTramo.tipoViaje == 1){
                 <span>Ida</span>
                 <br>
@@ -19,21 +19,21 @@
                 </span>
                 }
             </div>
-            <div class="col-md-3">
+            <div class="col-sm-3">
                 <span>{{v_rutaTramo.fechaViaje | date:'dd/MM/yyyy'}}</span>
             </div>
-            <div class="col-md-2">
+            <div class="col-sm-2">
                 <span>{{v_rutaTramo.origen.codigoIata}}</span><br><span
                     style="font-size: 8pt;">{{v_rutaTramo.origen.nombreCiudad}}</span>
             </div>
-            <div class="col-md-2">
+            <div class="col-sm-2">
                 <span>{{v_rutaTramo.destino.codigoIata}}</span><br><span
                     style="font-size: 8pt;">{{v_rutaTramo.destino.nombreCiudad}}</span>
             </div>
-            <div class="col-md-2">
+            <div class="col-sm-2">
                 <span>&nbsp;</span>
             </div>
-            <div class="col-md-2">
+            <div class="col-sm-2">
                 <span>&nbsp;</span>
             </div>
         </div>
